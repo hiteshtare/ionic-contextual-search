@@ -1,5 +1,7 @@
 {
   "name": "ionic-contextual-search",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

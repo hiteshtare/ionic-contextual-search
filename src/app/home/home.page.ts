@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { DataService } from './data.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +9,18 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  searchTerm: string = "";
+  jsonData: any;
 
+  constructor(public navCtrl: NavController, public dataService: DataService) {
+  }
+
+  ionViewDidLoad() {
+    this.setFilteredItems();
+  }
+
+  async setFilteredItems() {
+    // this.jsonData = this.dataService.filterItems(this.searchTerm);
+    this.jsonData = await this.dataService.contextualSearch(this.searchTerm);
+  }
 }
