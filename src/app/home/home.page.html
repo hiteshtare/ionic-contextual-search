@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tensor Flow : Contextual Search
+      Contextual Search
     </ion-title>
   </ion-toolbar>
   <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="setFilteredItems()"></ion-searchbar>
@@ -12,11 +12,11 @@
     <ion-item *ngFor="let data of jsonData">
       <ion-label>
         <ion-text color="primary">
-          {{data.name}}
+          {{data.contactid}}
         </ion-text>
         <br>
         <ion-text color="secondary">
-          {{data.score}}
+          {{data.specialty}}
         </ion-text>
       </ion-label>
     </ion-item>

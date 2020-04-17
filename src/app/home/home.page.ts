@@ -20,7 +20,6 @@ export class HomePage {
   }
 
   async setFilteredItems() {
-    // this.jsonData = this.dataService.filterItems(this.searchTerm);
     this.jsonData = await this.dataService.contextualSearch(this.searchTerm);
   }
 }
