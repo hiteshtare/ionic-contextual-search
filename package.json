@@ -28,6 +28,7 @@
     "@ionic/angular": "^5.0.0",
     "@tensorflow-models/universal-sentence-encoder": "^1.2.2",
     "@tensorflow/tfjs": "^1.7.2",
+    "angular-cli-ghpages": "^0.6.2",
     "cordova-plugin-advanced-http": "^2.4.1",
     "core-js": "^2.5.4",
     "rxjs": "^6.5.5",
