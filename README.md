@@ -1,5 +1,9 @@
 # ionic-contextual-search
 
+### Docker Commands ###
+* docker build -t contextual-search:v1 .
+* docker run contextual-search:v1  
+
 ### Deployment Commands ###
 1.npm i angular-cli-ghpages --save
 2.ionic build --prod -- --base-href https://hiteshtare.github.io/ionic-contextual-search/
