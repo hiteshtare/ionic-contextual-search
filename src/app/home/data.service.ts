@@ -1,9 +1,10 @@
+import { OfflineUniversalSentenceEncoderService, UniversalSentenceEncoder } from './offline-use.service';
 import { Injectable } from '@angular/core';
 
 import * as tensorflowModels from '@tensorflow-models/universal-sentence-encoder';
 import * as tf from '@tensorflow/tfjs';
 import { HttpClient } from "@angular/common/http";
-import { Tensor2D, loadGraphModel, loadLayersModel } from '@tensorflow/tfjs';
+import { Tensor2D } from '@tensorflow/tfjs';
 
 @Injectable()
 export class DataService {
@@ -13,7 +14,7 @@ export class DataService {
   model_GraphModel: tf.GraphModel;
   model_Tokenizer: tensorflowModels.Tokenizer;
 
-  model_UniversalSentenceEncoder: tensorflowModels.UniversalSentenceEncoder;
+  model_UniversalSentenceEncoder: UniversalSentenceEncoder;
 
   embeddings: Tensor2D;
 
@@ -792,54 +793,18 @@ export class DataService {
     }
   ];
 
-  constructor(private http: HttpClient) {
-    this.loadModels();
+  constructor(private http: HttpClient, private offlineUSEService: OfflineUniversalSentenceEncoderService) {
+    this.loadOfflineUSEModel();
   }
 
-  async fetchModelsfromAssets() {
-    const MODEL_INDEXEDDB_URL = 'indexeddb://mnist-model';
+  async loadOfflineUSEModel() {
+    console.warn(`loadOfflineUSEModel`);
 
-    try {
-      // Try loading locally saved model
-      const model = await loadGraphModel(MODEL_INDEXEDDB_URL);
-      console.warn('Model loaded from IndexedDB');
-
-      return model;
-    } catch (error) {
-      // If local load fails, get it from the server
-      try {
-        const model = await loadGraphModel('assets/models/model.json');
-        console.warn('Model loaded from HTTP.');
-
-        // Store the downloaded model locally for future use
-        await model.save(MODEL_INDEXEDDB_URL);
-        console.warn('Model saved to IndexedDB.');
-
-        return model;
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-
-  async loadModels() {
-    console.warn(`loadModels`);
-
-    this.model_LayersModel = await this.fetchModelsfromAssets();
-    console.info(`model_LayersModel`);
-    console.log(this.model_LayersModel);
-
-    await this.fetchTensorFlowModels();
-  }
-
-  async fetchTensorFlowModels() {
-    console.warn(`fetchTensorFlowModels`);
-
-    this.model_UniversalSentenceEncoder = await tensorflowModels.load();
+    this.model_UniversalSentenceEncoder = await this.offlineUSEService.load();
     console.info(`model_UniversalSentenceEncoder`);
     console.log(this.model_UniversalSentenceEncoder);
 
-    this.embeddings = await this.model_UniversalSentenceEncoder.embed(this.sentences);
+    this.embeddings = await this.offlineUSEService.embed(this.sentences);
     console.warn("tensorflowModels are loaded!");
   }
 
@@ -852,7 +817,7 @@ export class DataService {
     let customersMatchingTopScore = [];
 
     if (searchTerm) {
-      const inputEmbeddings = await this.model_UniversalSentenceEncoder.embed(required);
+      const inputEmbeddings = await this.offlineUSEService.embed(required);
       for (let i = 0; i < this.sentences.length; i++) {
         for (let j = 0; j < required.length; j++) {
           const sentenceI = this.embeddings.slice([i, 0], [1]);
@@ -883,10 +848,4 @@ export class DataService {
 
     return customersMatchingTopScore;
   }
-
-  // loadJSON() {
-  //   return this.http.get('assets/json/vocab.json', {}).pipe(map(data => {
-  //     return data;
-  //   }));
-  // }
 }
