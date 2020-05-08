@@ -18,6 +18,7 @@ export class DataService {
 
   embeddings: Tensor2D;
 
+  //Specialites
   sentences = ["Abdominal Surgery",
     "General Practice",
     "Hand Surgery (Plastic Surgery)",
@@ -78,6 +79,7 @@ export class DataService {
     "Cardiovascular Diseases"
   ];
 
+  //Customer with Specialites (extracted from Excel)
   customersWithSpecialities = [
     {
       contactid: "Keri Alderman",
